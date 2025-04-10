@@ -20,10 +20,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      - name: Install Dependencies (Clean)
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Rebuild native modules
+        run: npm rebuild
 
       - name: Run Build
         run: npm run build
