@@ -15,10 +15,11 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 22.13.0
+          node-version: 20  # use LTS version
 
       - name: Install & Build
         working-directory: frontend-nextjs
         run: |
           npm ci
+          npm rebuild lightningcss
           npm run build
