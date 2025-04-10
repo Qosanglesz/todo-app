@@ -20,5 +20,5 @@ jobs:
       - name: Install & Build
         working-directory: frontend-nextjs
         run: |
-          npm install
+          npm ci
           npm run build
