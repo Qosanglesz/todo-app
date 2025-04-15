@@ -20,9 +20,7 @@ export default function CreateTodoDialog() {
                     <DialogTitle>Create New Todo</DialogTitle>
                     <DialogDescription>Fill out the form below to create a new todo item.</DialogDescription>
                 </DialogHeader>
-                <TodoCreateForm onSubmit={()=> {
-                    return null;
-                }}/>
+                <TodoCreateForm/>
             </DialogContent>
         </Dialog>
     )

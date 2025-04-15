@@ -4,7 +4,7 @@ import "./globals.css";
 import React from "react";
 import Navbar from "@/components/navbar-footer/Navbar";
 import Footer from "@/components/navbar-footer/Footer";
-
+import {Toaster} from "sonner";
 
 export const metadata: Metadata = {
     title: "Todo List",
@@ -31,6 +31,7 @@ export default function RootLayout({
                         {children}
                     </div>
                     <Footer />
+                    <Toaster />
                 </ThemeProvider>
                 </body>
             </html>

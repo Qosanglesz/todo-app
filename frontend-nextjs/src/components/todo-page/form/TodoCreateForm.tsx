@@ -9,7 +9,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { format } from "date-fns"
-import {TodosType} from "@/types/todosType";
+import { toast } from "sonner"
+import {CreateTodoRequest} from "@/app/todo/action";
 
 const formSchema = z.object({
     name: z
@@ -41,7 +42,7 @@ export function TodoCreateForm() {
         },
     })
 
-    function onSubmit() {
+    async function onSubmit() {
 
         const data= {
             name: form.getValues('name'),
@@ -49,6 +50,10 @@ export function TodoCreateForm() {
             endedAt: form.getValues('dueDate')
         }
         console.log(data)
+        const responseStatus = await CreateTodoRequest(data)
+        console.log(responseStatus)
+        toast("Todo has been created.")
+
     }
 
     return (
