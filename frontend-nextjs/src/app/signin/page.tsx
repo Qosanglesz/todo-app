@@ -36,7 +36,7 @@ export default function SignInPage() {
                     </CardContent>
                     <CardFooter className="flex justify-center">
                         <div className="text-sm text-muted-foreground">
-                            Don't have an account?{" "}
+                            {"Don't have an account?"}
                             <Link href="/signup" className="font-medium text-primary underline-offset-4 hover:underline">
                                 Sign up
                             </Link>
