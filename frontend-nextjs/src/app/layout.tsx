@@ -2,6 +2,8 @@ import type {Metadata} from "next";
 import {ThemeProvider} from "@/components/theme-provider"
 import "./globals.css";
 import React from "react";
+import Navbar from "@/components/navbar-footer/Navbar";
+import Footer from "@/components/navbar-footer/Footer";
 
 
 export const metadata: Metadata = {
@@ -24,7 +26,11 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {children}
+                    <Navbar isAuthenticated={false}/>
+                    <div className="mx-32 my-5">
+                        {children}
+                    </div>
+                    <Footer />
                 </ThemeProvider>
                 </body>
             </html>
