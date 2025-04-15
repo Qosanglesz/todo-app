@@ -32,7 +32,7 @@ const formSchema = z.object({
 })
 
 
-export function TodoCreateForm() {
+export function TodoCreateForm({ onCreated }: { onCreated?: () => void }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -58,6 +58,7 @@ export function TodoCreateForm() {
             }
 
             toast.success('Todo has been created')
+            onCreated?.()
         } catch {
             toast.error('Something went wrong.')
         }

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import {TodoCreateForm} from "@/components/todo-page/form/TodoCreateForm";
 
-export default function CreateTodoDialog() {
+export default function CreateTodoDialog({ onCreated }: { onCreated: () => void }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -20,8 +20,9 @@ export default function CreateTodoDialog() {
                     <DialogTitle>Create New Todo</DialogTitle>
                     <DialogDescription>Fill out the form below to create a new todo item.</DialogDescription>
                 </DialogHeader>
-                <TodoCreateForm/>
+                <TodoCreateForm onCreated={onCreated} />
             </DialogContent>
         </Dialog>
     )
 }
+

@@ -1,7 +1,7 @@
 'use server'
 
 
-import {TodoCreateDTO} from "@/types/todosType";
+import {TodoCreateDTO, TodosType} from "@/types/todosType";
 
 export async function CreateTodoRequest(data: TodoCreateDTO): Promise<{ success: boolean, message?: string }> {
     try {
@@ -23,4 +23,12 @@ export async function CreateTodoRequest(data: TodoCreateDTO): Promise<{ success:
             message: (error as Error).message || 'Internal Server Error',
         }
     }
+}
+
+export async function fetchAllTodosRequest(): Promise<TodosType[]> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos`, {
+        method: 'GET',
+        headers: {"Content-Type": "application/json"},
+    })
+    return response.json();
 }
