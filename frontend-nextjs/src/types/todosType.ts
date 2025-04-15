@@ -7,3 +7,9 @@ export interface TodosType {
     updatedAt: Date;
     endedAt: Date;
 }
+
+export interface TodoCreateDTO {
+    name: string;
+    description: string;
+    endedAt: Date;
+}

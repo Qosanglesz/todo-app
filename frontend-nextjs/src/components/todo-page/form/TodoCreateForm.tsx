@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { format } from "date-fns"
 import { toast } from "sonner"
-import {CreateTodoRequest} from "@/app/todo/action";
+import {CreateTodoRequest} from "@/app/todo/actions";
 
 const formSchema = z.object({
     name: z
@@ -42,18 +42,25 @@ export function TodoCreateForm() {
         },
     })
 
-    async function onSubmit() {
-
-        const data= {
+    async function onSubmit(): Promise<void> {
+        const data = {
             name: form.getValues('name'),
             description: form.getValues('description'),
             endedAt: form.getValues('dueDate')
         }
-        console.log(data)
-        const responseStatus = await CreateTodoRequest(data)
-        console.log(responseStatus)
-        toast("Todo has been created.")
 
+        try {
+            const result = await CreateTodoRequest(data)
+
+            if (!result.success) {
+                toast.error(result.message)
+                return
+            }
+
+            toast.success('Todo has been created')
+        } catch {
+            toast.error('Something went wrong.')
+        }
     }
 
     return (
