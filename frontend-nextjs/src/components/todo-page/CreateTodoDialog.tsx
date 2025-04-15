@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -6,26 +7,23 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {Button} from "@/components/ui/button"
-
+import {TodoCreateForm} from "@/components/todo-page/form/TodoCreateForm";
 
 export default function CreateTodoDialog() {
     return (
-        <div>
-            <Dialog>
-                <DialogTrigger asChild={true}>
-                    <Button>Create Todo</Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                            This action cannot be undone. This will permanently delete your account
-                            and remove your data from our servers.
-                        </DialogDescription>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
-        </div>
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button>Create Todo</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Create New Todo</DialogTitle>
+                    <DialogDescription>Fill out the form below to create a new todo item.</DialogDescription>
+                </DialogHeader>
+                <TodoCreateForm onSubmit={()=> {
+                    return null;
+                }}/>
+            </DialogContent>
+        </Dialog>
     )
 }

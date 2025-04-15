@@ -1,8 +1,8 @@
 "use client"
 
 import TodoTable from "@/components/todo-page/TodoTable";
-import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
 import TodoSearchBar from "@/components/todo-page/TodoSearchBar";
+import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
 
 export default function TodoPage() {
     return (
@@ -17,7 +17,6 @@ export default function TodoPage() {
             <div>
                 <TodoTable/>
             </div>
-
         </div>
     )
 }
