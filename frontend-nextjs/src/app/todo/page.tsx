@@ -17,7 +17,6 @@ export default function TodoPage() {
             try {
                 const todoData = await fetchAllTodosRequest();
                 setTodos(todoData)
-                console.log("test")
             } catch (error) {
                 toast.error((error as Error).message);
             } finally {
