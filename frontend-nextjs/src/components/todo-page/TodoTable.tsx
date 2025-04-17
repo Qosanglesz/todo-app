@@ -6,10 +6,11 @@ import {TodosType} from "@/types/todosType";
 import {Card} from "@/components/ui/card";
 
 interface TodoTableProp {
-    todos: TodosType[]
+    todos: TodosType[];
+    onDelete: (id:string) => void;
 }
 
-export default function TodoTable({todos}: TodoTableProp) {
+export default function TodoTable({todos, onDelete}: TodoTableProp) {
     return (
         <div>
             <Card className="my-5">
@@ -37,7 +38,12 @@ export default function TodoTable({todos}: TodoTableProp) {
                                 <TableCell>{todo.isComplete ? 'Done' : 'Pending'}</TableCell>
                                 <TableCell className="text-center">
                                     <Button variant="outline">Update</Button>
-                                    <Button variant="destructive" className="ml-2">Delete</Button>
+                                    <Button
+                                        variant="destructive" className="ml-2"
+                                        onClick={()=> {onDelete(todo.todo_id)}}
+                                    >
+                                        Delete
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}

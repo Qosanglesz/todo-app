@@ -4,7 +4,7 @@ import TodoTable from "@/components/todo-page/TodoTable";
 import TodoSearchBar from "@/components/todo-page/TodoSearchBar";
 import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
 import {useEffect, useState} from "react";
-import {fetchAllTodosRequest} from "@/app/todo/actions";
+import {deleteTodoRequest, fetchAllTodosRequest} from "@/app/todo/actions";
 import {toast} from "sonner";
 import {TodosType} from "@/types/todosType";
 
@@ -37,6 +37,23 @@ export default function TodoPage() {
             setIsLoading(false)
         }
     }
+    const onDeleted = async (id:string) => {
+        setIsLoading(true)
+        try {
+            const result = await deleteTodoRequest(id);
+            if (result.success) {
+                toast.success("Deleted todo successfully!")
+                await reloadTodos()
+            } else {
+                toast.error(result.message)
+            }
+
+        } catch (error) {
+            toast.error((error as Error).message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     if (isLoading) {
         return (
@@ -56,7 +73,7 @@ export default function TodoPage() {
             </div>
 
             <div>
-                <TodoTable todos={todos}/>
+                <TodoTable todos={todos} onDelete={onDeleted}/>
             </div>
         </div>
     )

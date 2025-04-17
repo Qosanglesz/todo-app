@@ -32,3 +32,22 @@ export async function fetchAllTodosRequest(): Promise<TodosType[]> {
     })
     return response.json();
 }
+
+export async function deleteTodoRequest(id: string): Promise<{ success: boolean, message?: string }> {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
+            method: 'DELETE',
+            headers: {"Content-Type": "application/json"},
+        })
+        if (!response.ok) {
+            const errorBody = await response.json();
+            return {success: false, message: errorBody.message || 'Unexpected error occurred'}
+        }
+        return {success: true}
+    } catch (error) {
+        return {
+            success: false,
+            message: (error as Error).message || 'Internal Server Error',
+        }
+    }
+}
