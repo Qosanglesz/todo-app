@@ -4,7 +4,10 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    ManyToOne,
+    JoinColumn,
 } from "typeorm";
+import {User} from "../../users/entities/user.entity";
 
 @Entity({ name: "todos" })
 export class Todo {
@@ -28,4 +31,8 @@ export class Todo {
 
     @Column({ type: "timestamp", nullable: true, name: "ended_at" })
     endedAt: Date | null;
+
+    @ManyToOne(() => User, (user) => user.todos, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "user_id" })
+    user: User;
 }

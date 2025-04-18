@@ -40,6 +40,7 @@ export default function TodoPage() {
     const searchHandle = async () => {
       const result = await fetchAllTodosRequest(10, undefined, search);
       setCurrentPage(1);
+      setTodos(result.data);
       setTotalPage(result.totalPages);
     };
     searchHandle();
