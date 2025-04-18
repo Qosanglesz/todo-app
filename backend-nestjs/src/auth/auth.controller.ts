@@ -1,0 +1,31 @@
+import { Controller, Post, Body, Res,HttpCode } from '@nestjs/common';
+import { Response} from 'express';
+import { UserService } from '../users/user.service';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly userService: UserService) {}
+
+  @Post('login')
+  @HttpCode(200)
+  async login(
+      @Body() body: { username: string; password: string },
+      @Res({ passthrough: true }) res: Response
+  ) {
+    const { token } = await this.userService.login(body.username, body.password);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+    return { message: 'Login successful' };
+  }
+
+  @Post('logout')
+  @HttpCode(200)
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt');
+    return { message: 'Logout successful' };
+  }
+}
