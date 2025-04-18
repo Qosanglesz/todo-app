@@ -86,7 +86,6 @@ export default function Navbar({ isAuthAction }: NavbarProps) {
 
           {/* Mobile Nav */}
           <div className="md:hidden flex items-center gap-2">
-            <ModeToggle />
             <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
               <Menu />
             </Button>
