@@ -37,7 +37,7 @@ export default function TodoTable({ todos, onDelete, onEdit, currentPage }: Todo
     return (currentPage - 1) * 10 + index + 1;
   };
 
-  const blankRows = 10 - todos.length;
+  const blankRows = 10 - todos?.length;
 
   return (
     <div>
@@ -57,7 +57,7 @@ export default function TodoTable({ todos, onDelete, onEdit, currentPage }: Todo
           </TableHeader>
           <TableBody>
             {/* Actual Todo Rows */}
-            {todos.map((todo, index) => (
+            {todos?.map((todo, index) => (
               <TableRow key={todo.todo_id} className="h-8">
                 <TableCell>{calculateIndex(index)}</TableCell>
                 <TableCell>{todo.name}</TableCell>

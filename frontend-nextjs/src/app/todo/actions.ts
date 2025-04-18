@@ -2,14 +2,22 @@
 
 import { TodoCreateDTO, TodosType } from '@/types/todosType';
 
+import {cookies} from "next/headers";
+
 export async function CreateTodoRequest(
   data: TodoCreateDTO,
 ): Promise<{ success: boolean; message?: string }> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('jwt')?.value;
+  if (!token) return { success: false, message: 'Unauthorized' };
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `jwt=${token}`,
+      },
     });
 
     if (!response.ok) {
@@ -37,24 +45,27 @@ export async function fetchAllTodosRequest(
   offset?: number,
   search?: string,
 ): Promise<PaginatedTodosResponse> {
-  const params = new URLSearchParams();
-  if (limit !== undefined) params.append('limit', limit.toString());
-  if (offset !== undefined) params.append('offset', offset.toString());
-  if (search) params.append('search', search);
+  try {
+    const params = new URLSearchParams();
+    if (limit !== undefined) params.append('limit', limit.toString());
+    if (offset !== undefined) params.append('offset', offset.toString());
+    if (search) params.append('search', search);
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`,
-    {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch todos: ${response.statusText}`);
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        },
+    );
+    return response.json();
+  } catch {
+    return {
+      data: [],
+      totalCount: 0,
+      totalPages: 0,
+    };
   }
-
-  return response.json();
 }
 
 export async function deleteTodoRequest(
