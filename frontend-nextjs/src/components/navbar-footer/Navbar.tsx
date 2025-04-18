@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ListTodo } from 'lucide-react';
-import { ModeToggle } from '@/components/theme/ModeToggle';
 import { toast } from 'sonner';
 
 interface NavbarProps {
