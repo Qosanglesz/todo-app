@@ -14,38 +14,69 @@ interface Props {
     onPageChange: (page: number) => void;
 }
 
-export default function MyPagination({totalPage, currentPage, onPageChange}: Props) {
+export default function MyPagination({ totalPage, currentPage, onPageChange }: Props) {
+    const pageNumbers = [];
+
+    const startPage = Math.max(currentPage - 1, 1);
+    const endPage = Math.min(currentPage + 1, totalPage);
+
+    for (let page = startPage; page <= endPage; page++) {
+        pageNumbers.push(page);
+    }
+
     return (
         <div>
             <Pagination>
                 <PaginationContent>
+                    {/* Previous Button */}
                     <PaginationItem>
-                        {currentPage > 1 ? (<PaginationPrevious onClick={()=> {
-                            onPageChange(currentPage-1)
-                        }}/>): (<PaginationPrevious/>)}
+                        <PaginationPrevious
+                            onClick={() => {
+                                if (currentPage > 1) onPageChange(currentPage - 1);
+                            }}
+                        />
                     </PaginationItem>
-                    {new Array(totalPage).fill(0).map((_, page) => {
-                        page += 1
-                        return (
-                            <PaginationItem key={page}>
-                                <PaginationLink
-                                    isActive={page === currentPage}
-                                    onClick={()=> {
-                                        onPageChange(page)
-                                    }}
-                                >{page}</PaginationLink>
-                            </PaginationItem>
-                        )
-                    })}
+
+                    {/* Pages: current ±1 */}
+                    {pageNumbers.map((page) => (
+                        <PaginationItem key={page}>
+                            <PaginationLink
+                                isActive={page === currentPage}
+                                onClick={() => onPageChange(page)}
+                            >
+                                {page}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+
+                    {/* Ellipsis */}
+                    {endPage < totalPage - 1 && (
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                    )}
+
+                    {/* Last Page */}
+                    {endPage < totalPage && (
+                        <PaginationItem>
+                            <PaginationLink
+                                onClick={() => onPageChange(totalPage)}
+                            >
+                                {totalPage}
+                            </PaginationLink>
+                        </PaginationItem>
+                    )}
+
+                    {/* Next Button */}
                     <PaginationItem>
-                        <PaginationEllipsis/>
+                        <PaginationNext
+                            onClick={() => {
+                                if (currentPage < totalPage) onPageChange(currentPage + 1);
+                            }}
+                        />
                     </PaginationItem>
-                    {currentPage < totalPage ? (<PaginationNext onClick={()=> {
-                        onPageChange(currentPage+1)
-                    }}/>): (<PaginationNext/>)}
                 </PaginationContent>
             </Pagination>
-
         </div>
-    )
+    );
 }

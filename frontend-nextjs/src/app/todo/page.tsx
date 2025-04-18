@@ -76,7 +76,7 @@ export default function TodoPage() {
         }
     }
 
-    const onDeleted = async (id:string) => {
+    const onDeleted = async (id: string) => {
         setIsLoading(true)
         try {
             const result = await deleteTodoRequest(id);
@@ -96,11 +96,11 @@ export default function TodoPage() {
 
     const handlePageChange = async (page: number) => {
         setCurrentPage(page)
-        const offset = (page: number)  => {
-            if ((page-1) === 0) {
+        const offset = (page: number) => {
+            if ((page - 1) === 0) {
                 return undefined
             }
-            return (page-1)*10;
+            return (page - 1) * 10;
         }
         await fetchAllTodosRequest(10, offset(page))
             .then((data) => {
@@ -124,13 +124,18 @@ export default function TodoPage() {
         <div className="h-screen">
             <p className="text-2xl font-bold">{'Todo List Management'}</p>
 
-            <div className="flex justify-between items-center">
-                <Input type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)}/>
-                <CreateTodoDialog onCreated={reloadTodos} />
+            <div
+                className="flex flex-col justify-between items-center my-5 sm:flex-row sm:justify-between sm:items-start">
+                <div className="w-1/3">
+                    <Input type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)}/>
+                </div>
+                <div>
+                    <CreateTodoDialog onCreated={reloadTodos}/>
+                </div>
             </div>
 
             <div>
-                <TodoTable todos={todos} onDelete={onDeleted} onEdit={onEdit}/>
+                <TodoTable todos={todos} onDelete={onDeleted} onEdit={onEdit} currentPage={currentPage}/>
             </div>
             <div>
                 <MyPagination totalPage={totalPage} currentPage={currentPage} onPageChange={handlePageChange}/>

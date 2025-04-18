@@ -8,12 +8,13 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {TodoCreateForm} from "@/components/todo-page/form/TodoCreateForm";
+import {BadgePlus} from "lucide-react";
 
 export default function CreateTodoDialog({ onCreated }: { onCreated: () => void }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button>Create Todo</Button>
+                <Button>Create Todo<BadgePlus /></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
