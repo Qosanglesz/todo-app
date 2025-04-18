@@ -5,7 +5,7 @@ import React from 'react';
 import Navbar from '@/components/navbar-footer/Navbar';
 import Footer from '@/components/navbar-footer/Footer';
 import { Toaster } from 'sonner';
-import {isAuth} from "@/app/actions";
+import { isAuth } from '@/app/actions';
 
 export const metadata: Metadata = {
   title: 'Todo List',
@@ -17,7 +17,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -28,7 +27,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar isAuthAction={isAuth}/>
+            <Navbar isAuthAction={isAuth} />
             <div className="mx-32 my-5">{children}</div>
             <Footer />
             <Toaster richColors />

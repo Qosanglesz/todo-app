@@ -2,18 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ListTodo, Menu } from 'lucide-react';
 import { ModeToggle } from '@/components/theme/ModeToggle';
-import {toast} from "sonner";
+import { toast } from 'sonner';
 
 interface NavbarProps {
-  isAuthAction: () => Promise<{success: boolean, message: string}>
+  isAuthAction: () => Promise<{ success: boolean; message: string }>;
 }
 
-export default function Navbar({isAuthAction}: NavbarProps) {
+export default function Navbar({ isAuthAction }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,17 +25,15 @@ export default function Navbar({isAuthAction}: NavbarProps) {
 
   useEffect(() => {
     const firstLoad = async () => {
-      const {success, message} = await isAuthAction()
+      const { success, message } = await isAuthAction();
       if (success) {
-        setIsAuthenticated(success)
+        setIsAuthenticated(success);
+      } else {
+        toast.error(message);
       }
-      else {
-        toast.error(message)
-      }
-    }
-    firstLoad()
-  },[])
-
+    };
+    firstLoad();
+  }, [isAuthAction]);
 
   return (
     <nav className="w-full border-b py-3 shadow-sm bg-background text-foreground">

@@ -1,23 +1,21 @@
 'use server';
 
 import { TodoCreateDTO, TodosType } from '@/types/todosType';
+import { fetchWithAuth } from '@/lib/fetchWithAuth';
 
-import {cookies} from "next/headers";
+export type PaginatedTodosResponse = {
+  data: TodosType[];
+  totalCount: number;
+  totalPages: number;
+};
 
 export async function CreateTodoRequest(
   data: TodoCreateDTO,
 ): Promise<{ success: boolean; message?: string }> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('jwt')?.value;
-  if (!token) return { success: false, message: 'Unauthorized' };
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos`, {
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': `jwt=${token}`,
-      },
     });
 
     if (!response.ok) {
@@ -34,12 +32,6 @@ export async function CreateTodoRequest(
   }
 }
 
-export type PaginatedTodosResponse = {
-  data: TodosType[];
-  totalCount: number;
-  totalPages: number;
-};
-
 export async function fetchAllTodosRequest(
   limit?: number,
   offset?: number,
@@ -51,13 +43,13 @@ export async function fetchAllTodosRequest(
     if (offset !== undefined) params.append('offset', offset.toString());
     if (search) params.append('search', search);
 
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
+    const response = await fetchWithAuth(
+      `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`,
+      {
+        method: 'GET',
+      },
     );
+
     return response.json();
   } catch {
     return {
@@ -72,14 +64,15 @@ export async function deleteTodoRequest(
   id: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
     });
+
     if (!response.ok) {
       const errorBody = await response.json();
       return { success: false, message: errorBody.message || 'Unexpected error occurred' };
     }
+
     return { success: true };
   } catch (error) {
     return {
@@ -98,11 +91,11 @@ export async function updateTodoRequest(
   message: string;
 }> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
     });
+
     if (!response.ok) {
       const errorBody = await response.json();
       return {
@@ -110,6 +103,7 @@ export async function updateTodoRequest(
         message: errorBody.message || 'Unexpected error occurred',
       };
     }
+
     return {
       success: true,
       message: 'updated successfully',
