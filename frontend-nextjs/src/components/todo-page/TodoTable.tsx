@@ -2,7 +2,7 @@
 
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
-import {TodosType} from "@/types/todosType";
+import {TodosType, TodoUpdateDTO} from "@/types/todosType";
 import {Card} from "@/components/ui/card";
 import {
     Dialog,
@@ -18,9 +18,10 @@ import {TodoEditForm} from "@/components/todo-page/form/TodoEditForm";
 interface TodoTableProp {
     todos: TodosType[];
     onDelete: (id:string) => void;
+    onEdit: (todoId: string, newData: TodoUpdateDTO) => void;
 }
 
-export default function TodoTable({todos, onDelete}: TodoTableProp) {
+export default function TodoTable({todos, onDelete, onEdit}: TodoTableProp) {
     return (
         <div>
             <Card className="my-5">
@@ -47,6 +48,7 @@ export default function TodoTable({todos, onDelete}: TodoTableProp) {
                                 <TableCell>{new Date(todo.endedAt).toLocaleString()}</TableCell>
                                 <TableCell>{todo.isComplete ? 'Done' : 'Pending'}</TableCell>
                                 <TableCell className="text-center">
+                                    {/* Dialog to Edit todo*/}
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline">Update</Button>
@@ -56,7 +58,7 @@ export default function TodoTable({todos, onDelete}: TodoTableProp) {
                                                 <DialogTitle>Update Todo</DialogTitle>
                                                 <DialogDescription>Fill out the form below to update a todo item.</DialogDescription>
                                             </DialogHeader>
-                                            <TodoEditForm/>
+                                            <TodoEditForm initialValues={todo} onEdit={onEdit}/>
                                         </DialogContent>
                                     </Dialog>
 

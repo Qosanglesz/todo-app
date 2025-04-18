@@ -13,3 +13,10 @@ export interface TodoCreateDTO {
     description: string;
     endedAt: Date;
 }
+
+export interface TodoUpdateDTO {
+    name: string;
+    description: string;
+    isComplete: boolean;
+    endedAt: Date;
+}

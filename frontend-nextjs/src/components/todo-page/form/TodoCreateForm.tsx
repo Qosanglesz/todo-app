@@ -27,7 +27,7 @@ const formSchema = z.object({
             message: "Todo description must be at most 100 characters.",
         }),
     dueDate: z.date({
-        required_error: "A date of birth is required.",
+        required_error: "A date is required.",
     }),
 })
 

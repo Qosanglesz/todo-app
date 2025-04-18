@@ -4,10 +4,10 @@ import TodoTable from "@/components/todo-page/TodoTable";
 import TodoSearchBar from "@/components/todo-page/TodoSearchBar";
 import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
 import {useEffect, useState} from "react";
-import {deleteTodoRequest, fetchAllTodosRequest} from "@/app/todo/actions";
+import {deleteTodoRequest, fetchAllTodosRequest, updateTodoRequest} from "@/app/todo/actions";
 import {toast} from "sonner";
-import {TodosType} from "@/types/todosType";
-import {TodoEditForm} from "@/components/todo-page/form/TodoEditForm";
+import {TodosType, TodoUpdateDTO} from "@/types/todosType";
+import {Toast} from "next/dist/client/components/react-dev-overlay/ui/components/toast";
 
 export default function TodoPage() {
     const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +38,29 @@ export default function TodoPage() {
             setIsLoading(false)
         }
     }
+
+    const onEdit = async (todoId: string, newData: TodoUpdateDTO) => {
+        setIsLoading(true)
+        try {
+            const result = await updateTodoRequest(todoId, newData);
+            if (result.success && result.updatedTodo) {
+                const updatedTodo = result.updatedTodo
+                setTodos((prevTodos) =>
+                    prevTodos.map((todo) =>
+                        todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo
+                    )
+                )
+                toast.success("Success to update a todo")
+            } else {
+                toast.error(result.message)
+            }
+        } catch (error) {
+            toast.error((error as Error).message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     const onDeleted = async (id:string) => {
         setIsLoading(true)
         try {
@@ -74,7 +97,7 @@ export default function TodoPage() {
             </div>
 
             <div>
-                <TodoTable todos={todos} onDelete={onDeleted}/>
+                <TodoTable todos={todos} onDelete={onDeleted} onEdit={onEdit}/>
             </div>
         </div>
     )

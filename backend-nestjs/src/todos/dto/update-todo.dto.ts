@@ -26,6 +26,5 @@ export class UpdateTodoDto extends PartialType(CreateTodoDto) {
 
     @IsOptional()
     @IsDateString()
-    @Type(() => Date)
     endedAt?: Date;
 }

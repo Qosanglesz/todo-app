@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { format } from "date-fns"
 import { toast } from "sonner"
 import { Checkbox } from "@/components/ui/checkbox"
+import {TodosType, TodoUpdateDTO} from "@/types/todosType";
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Todo name must be at least 1 character." }).max(50),
@@ -28,35 +29,33 @@ const formSchema = z.object({
 })
 
 type TodoEditFormProps = {
-    initialValues: z.infer<typeof formSchema> & { id: string }
-    onUpdated?: () => void
+    initialValues: TodosType;
+    onEdit: (todoId: string, newData: TodoUpdateDTO) => void;
 }
 
-export function TodoEditForm() {
+export function TodoEditForm({initialValues, onEdit}: TodoEditFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            // name: initialValues.name,
-            // description: initialValues.description,
-            // dueDate: new Date(initialValues.dueDate),
-            // isComplete: initialValues.isComplete,
+            name: initialValues.name,
+            description: initialValues.description,
+            dueDate: new Date(initialValues.endedAt),
+            isComplete: initialValues.isComplete,
         },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // try {
-        //     const result = await UpdateTodoRequest({ ...values, id: initialValues.id })
-        //
-        //     if (!result.success) {
-        //         toast.error(result.message)
-        //         return
-        //     }
-        //
-        //     toast.success("Todo has been updated")
-        //     onUpdated?.()
-        // } catch {
-        //     toast.error("Something went wrong.")
-        // }
+        try {
+            const newData: TodoUpdateDTO = {
+                name: values.name,
+                description: values.description,
+                endedAt: new Date(values.dueDate.toISOString()),
+                isComplete: values.isComplete,
+            }
+            onEdit(initialValues.todo_id, newData)
+        } catch {
+            toast.error("Something went wrong.")
+        }
     }
 
     return (

@@ -51,3 +51,34 @@ export async function deleteTodoRequest(id: string): Promise<{ success: boolean,
         }
     }
 }
+
+export async function updateTodoRequest(id: string, data: TodoCreateDTO): Promise<{
+    success: boolean;
+    updatedTodo?: TodosType;
+    message: string;
+}> {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: {"Content-Type": "application/json"},
+        })
+        if (!response.ok) {
+            const errorBody = await response.json();
+            return {
+                success: false,
+                message: errorBody.message || 'Unexpected error occurred',
+            }
+        }
+        return {
+            success: true,
+            message: "updated successfully",
+            updatedTodo: await response.json()
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: (error as Error).message || 'Internal Server Error',
+        }
+    }
+}
