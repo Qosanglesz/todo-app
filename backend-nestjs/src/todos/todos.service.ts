@@ -4,6 +4,7 @@ import {UpdateTodoDto} from './dto/update-todo.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Todo} from "./entities/todo.entity";
 import {Repository} from "typeorm";
+import {PaginationQueryDto} from "./dto/pagination-query.dto";
 
 @Injectable()
 export class TodosService {
@@ -15,9 +16,25 @@ export class TodosService {
       return this.todoRepository.save(todo)
     }
 
-    async findAll(): Promise<Todo[]> {
-        return this.todoRepository.find()
+    async findAll(paginationQuery: PaginationQueryDto): Promise<{
+        data: Todo[];
+        totalCount: number;
+        totalPages: number;
+    }> {
+        const { limit = 10, offset = 0 } = paginationQuery;
+
+        const [data, totalCount] = await this.todoRepository.findAndCount({
+            skip: offset,
+            take: limit,
+            order: { createdAt: 'DESC' },
+        });
+
+        const totalPages = Math.ceil(totalCount / limit);
+
+        return { data, totalCount, totalPages };
     }
+
+
 
     async findOne(id: string): Promise<Todo> {
         const todo: Todo | null = await this.todoRepository.findOne({

@@ -25,13 +25,29 @@ export async function CreateTodoRequest(data: TodoCreateDTO): Promise<{ success:
     }
 }
 
-export async function fetchAllTodosRequest(): Promise<TodosType[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos`, {
+export type PaginatedTodosResponse = {
+    data: TodosType[];
+    totalCount: number;
+    totalPages: number;
+};
+
+export async function fetchAllTodosRequest(limit?: number, offset?: number): Promise<PaginatedTodosResponse> {
+    const params = new URLSearchParams();
+    if (limit !== undefined) params.append('limit', limit.toString());
+    if (offset !== undefined) params.append('offset', offset.toString());
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`, {
         method: 'GET',
-        headers: {"Content-Type": "application/json"},
-    })
+        headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch todos: ${response.statusText}`);
+    }
+
     return response.json();
 }
+
 
 export async function deleteTodoRequest(id: string): Promise<{ success: boolean, message?: string }> {
     try {

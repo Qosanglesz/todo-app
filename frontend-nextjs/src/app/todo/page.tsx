@@ -4,20 +4,23 @@ import TodoTable from "@/components/todo-page/TodoTable";
 import TodoSearchBar from "@/components/todo-page/TodoSearchBar";
 import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
 import {useEffect, useState} from "react";
-import {deleteTodoRequest, fetchAllTodosRequest, updateTodoRequest} from "@/app/todo/actions";
+import {deleteTodoRequest, fetchAllTodosRequest, PaginatedTodosResponse, updateTodoRequest} from "@/app/todo/actions";
 import {toast} from "sonner";
 import {TodosType, TodoUpdateDTO} from "@/types/todosType";
-import {Toast} from "next/dist/client/components/react-dev-overlay/ui/components/toast";
+import MyPagination from "@/components/pagination/MyPagination";
 
 export default function TodoPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [todos, setTodos] = useState<TodosType[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     useEffect(() => {
         const loadingTodos = async () => {
             try {
-                const todoData = await fetchAllTodosRequest();
-                setTodos(todoData)
+                const todoData: PaginatedTodosResponse = await fetchAllTodosRequest(10);
+                setTodos(todoData.data)
+                setTotalPage(todoData.totalPages)
             } catch (error) {
                 toast.error((error as Error).message);
             } finally {
@@ -31,7 +34,9 @@ export default function TodoPage() {
         setIsLoading(true)
         try {
             const todoData = await fetchAllTodosRequest()
-            setTodos(todoData)
+            setTodos(todoData.data)
+            setTotalPage(todoData.totalPages)
+            setCurrentPage(1)
         } catch (error) {
             toast.error((error as Error).message)
         } finally {
@@ -79,6 +84,26 @@ export default function TodoPage() {
         }
     }
 
+    const handlePageChange = async (page: number) => {
+        setCurrentPage(page)
+        setIsLoading(true)
+        const offset = (page: number)  => {
+            if ((page-1) === 0) {
+                return undefined
+            }
+            return (page-1)*10;
+        }
+        await fetchAllTodosRequest(10, offset(page))
+            .then((data) => {
+                setTodos(data.data)
+                setTotalPage(data.totalPages)
+            })
+            .catch((error) => {
+                toast.error((error as Error).message)
+            })
+        setIsLoading(false)
+    }
+
     if (isLoading) {
         return (
             <div>
@@ -98,6 +123,9 @@ export default function TodoPage() {
 
             <div>
                 <TodoTable todos={todos} onDelete={onDeleted} onEdit={onEdit}/>
+            </div>
+            <div>
+                <MyPagination totalPage={totalPage} currentPage={currentPage} onPageChange={handlePageChange}/>
             </div>
         </div>
     )
