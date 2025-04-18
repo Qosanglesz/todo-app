@@ -1,9 +1,22 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, HttpCode, Query} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    ParseUUIDPipe,
+    HttpCode,
+    Query,
+    UseGuards
+} from '@nestjs/common';
 import {TodosService} from './todos.service';
 import {CreateTodoDto} from './dto/create-todo.dto';
 import {UpdateTodoDto} from './dto/update-todo.dto';
 import {Todo} from "./entities/todo.entity";
 import {PaginationQueryDto} from "./dto/pagination-query.dto";
+import {AuthGuard} from "@nestjs/passport";
 
 @Controller('todos')
 export class TodosController {
@@ -12,12 +25,14 @@ export class TodosController {
 
     @Post()
     @HttpCode(201)
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() createTodoDto: CreateTodoDto): Promise<Todo> {
         return this.todosService.create(createTodoDto);
     }
 
     @Get()
     @HttpCode(200)
+    @UseGuards(AuthGuard('jwt'))
     async findAll(@Query() paginationQuery: PaginationQueryDto): Promise<{
         data: Todo[],
         totalCount: number,
@@ -28,18 +43,21 @@ export class TodosController {
 
     @Get(':id')
     @HttpCode(200)
+    @UseGuards(AuthGuard('jwt'))
     async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Todo> {
         return this.todosService.findOne(id);
     }
 
     @Patch(':id')
     @HttpCode(200)
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTodoDto: UpdateTodoDto): Promise<Todo> {
         return this.todosService.update(id, updateTodoDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
+    @UseGuards(AuthGuard('jwt'))
     async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         await this.todosService.remove(id);
     }

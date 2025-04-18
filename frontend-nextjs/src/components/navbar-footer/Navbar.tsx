@@ -37,7 +37,7 @@ export default function Navbar({ isAuthAction }: NavbarProps) {
 
   const handleLogout = async () => {
     setOpen(false);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/auth/logout`);
+    const res = await fetch(`/api/logout`);
     if (res.ok) {
       setIsAuthenticated(false);
       toast.success('Logged out successfully');
