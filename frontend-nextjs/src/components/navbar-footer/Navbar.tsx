@@ -12,6 +12,7 @@ interface NavbarProps {
   isAuthAction: () => Promise<{ success: boolean; message: string }>;
 }
 
+
 export default function Navbar({ isAuthAction }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
