@@ -25,7 +25,7 @@ export default function Navbar({ isAuthAction }: NavbarProps) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { success} = await isAuthAction();
+      const { success } = await isAuthAction();
       if (success) {
         setIsAuthenticated(true);
       } else {
@@ -47,97 +47,97 @@ export default function Navbar({ isAuthAction }: NavbarProps) {
   };
 
   return (
-      <nav className="w-full border-b py-3 shadow-sm bg-background text-foreground">
-        <div className="px-32 mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold flex items-center gap-2">
-            <ListTodo />
-            TodoApp
-          </Link>
+    <nav className="w-full border-b py-3 shadow-sm bg-background text-foreground">
+      <div className="px-32 mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="text-xl font-bold flex items-center gap-2">
+          <ListTodo />
+          TodoApp
+        </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex gap-4 items-center">
-            {navLinks.map((link) => (
-                <Link
+        {/* Desktop Nav */}
+        <div className="hidden md:flex gap-4 items-center">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={`text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          <ModeToggle />
+
+          {isAuthenticated ? (
+            <Button variant="outline" onClick={handleLogout}>
+              Logout
+            </Button>
+          ) : (
+            <>
+              <Link href="/signup">
+                <Button variant="ghost">Sign up</Button>
+              </Link>
+              <Link href="/signin">
+                <Button>Sign in</Button>
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Menu */}
+        <div className="md:hidden flex items-center gap-2">
+          <ModeToggle />
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[250px]">
+              <div className="flex flex-col gap-4 mt-8">
+                {navLinks.map((link) => (
+                  <Link
                     key={link.name}
                     href={link.href}
-                    className={`text-sm font-medium transition-colors ${
-                        pathname === link.href
-                            ? 'text-primary'
-                            : 'text-muted-foreground hover:text-foreground'
+                    onClick={() => setOpen(false)}
+                    className={`text-sm font-medium ${
+                      pathname === link.href
+                        ? 'text-primary'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
-                >
-                  {link.name}
-                </Link>
-            ))}
-
-            <ModeToggle />
-
-            {isAuthenticated ? (
-                <Button variant="outline" onClick={handleLogout}>
-                  Logout
-                </Button>
-            ) : (
-                <>
-                  <Link href="/signup">
-                    <Button variant="ghost">Sign up</Button>
+                  >
+                    {link.name}
                   </Link>
-                  <Link href="/signin">
-                    <Button>Sign in</Button>
-                  </Link>
-                </>
-            )}
-          </div>
+                ))}
 
-          {/* Mobile Menu */}
-          <div className="md:hidden flex items-center gap-2">
-            <ModeToggle />
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[250px]">
-                <div className="flex flex-col gap-4 mt-8">
-                  {navLinks.map((link) => (
-                      <Link
-                          key={link.name}
-                          href={link.href}
-                          onClick={() => setOpen(false)}
-                          className={`text-sm font-medium ${
-                              pathname === link.href
-                                  ? 'text-primary'
-                                  : 'text-muted-foreground hover:text-foreground'
-                          }`}
-                      >
-                        {link.name}
-                      </Link>
-                  ))}
-
-                  <div className="mt-4 flex flex-col gap-2">
-                    {isAuthenticated ? (
-                        <Button variant="outline" onClick={handleLogout}>
-                          Logout
+                <div className="mt-4 flex flex-col gap-2">
+                  {isAuthenticated ? (
+                    <Button variant="outline" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  ) : (
+                    <>
+                      <Link href="/signup" onClick={() => setOpen(false)}>
+                        <Button variant="ghost" className="w-full">
+                          Sign up
                         </Button>
-                    ) : (
-                        <>
-                          <Link href="/signup" onClick={() => setOpen(false)}>
-                            <Button variant="ghost" className="w-full">
-                              Sign up
-                            </Button>
-                          </Link>
-                          <Link href="/signin" onClick={() => setOpen(false)}>
-                            <Button className="w-full">Sign in</Button>
-                          </Link>
-                        </>
-                    )}
-                  </div>
+                      </Link>
+                      <Link href="/signin" onClick={() => setOpen(false)}>
+                        <Button className="w-full">Sign in</Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-      </nav>
+      </div>
+    </nav>
   );
 }

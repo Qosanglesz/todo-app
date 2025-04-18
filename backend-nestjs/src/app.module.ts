@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import {ConfigModule} from "@nestjs/config";
-import {DatabaseModule} from "./database/database.module";
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/database.module';
 import { TodosModule } from './todos/todos.module';
-import {UsersModule} from './users/user.module';
+import { UsersModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-      ConfigModule.forRoot({isGlobal: true}),
-      DatabaseModule,
-      TodosModule,
-      UsersModule,
-      AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    TodosModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
