@@ -34,7 +34,7 @@ export default function SignInPage() {
       const result = await signIn(signInData);
       if (result.success) {
         toast.success('Login successful');
-        await router.push('/todo');
+        router.push('/todo');
       } else {
         toast.error(result.message);
       }
@@ -42,6 +42,7 @@ export default function SignInPage() {
       toast.error((error as Error).message);
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 

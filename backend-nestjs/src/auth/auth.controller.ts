@@ -23,7 +23,7 @@ export class AuthController {
     return { message: 'Login successful' };
   }
 
-  @Post('logout')
+  @Get('logout')
   @HttpCode(200)
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('jwt');
