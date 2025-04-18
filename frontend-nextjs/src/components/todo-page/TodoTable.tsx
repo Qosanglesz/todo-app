@@ -4,6 +4,16 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Button} from "@/components/ui/button";
 import {TodosType} from "@/types/todosType";
 import {Card} from "@/components/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
+import {TodoCreateForm} from "@/components/todo-page/form/TodoCreateForm";
+import {TodoEditForm} from "@/components/todo-page/form/TodoEditForm";
 
 interface TodoTableProp {
     todos: TodosType[];
@@ -37,7 +47,19 @@ export default function TodoTable({todos, onDelete}: TodoTableProp) {
                                 <TableCell>{new Date(todo.endedAt).toLocaleString()}</TableCell>
                                 <TableCell>{todo.isComplete ? 'Done' : 'Pending'}</TableCell>
                                 <TableCell className="text-center">
-                                    <Button variant="outline">Update</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline">Update</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-md">
+                                            <DialogHeader>
+                                                <DialogTitle>Update Todo</DialogTitle>
+                                                <DialogDescription>Fill out the form below to update a todo item.</DialogDescription>
+                                            </DialogHeader>
+                                            <TodoEditForm/>
+                                        </DialogContent>
+                                    </Dialog>
+
                                     <Button
                                         variant="destructive" className="ml-2"
                                         onClick={()=> {onDelete(todo.todo_id)}}
