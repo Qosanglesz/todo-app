@@ -34,7 +34,7 @@ export default function SignInPage() {
       const result = await signIn(signInData);
       if (result.success) {
         toast.success('Login successful');
-        router.push('/todo');
+        window.location.href = '/todo';
       } else {
         toast.error(result.message);
       }

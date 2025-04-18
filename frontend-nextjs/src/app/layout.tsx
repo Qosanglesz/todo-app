@@ -17,6 +17,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const {success} = await isAuth();
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -27,7 +28,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar isAuthAction={isAuth} />
+            <Navbar isAuth={success} />
             <div className="mx-32 my-5">{children}</div>
             <Footer />
             <Toaster richColors />
