@@ -63,8 +63,6 @@ export default function Navbar({ isAuthAction }: NavbarProps) {
                 </Link>
             ))}
 
-            <ModeToggle />
-
             {isAuthenticated ? (
                 <Button variant="outline" onClick={handleLogout}>
                   Logout
