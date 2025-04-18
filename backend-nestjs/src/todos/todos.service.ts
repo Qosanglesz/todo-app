@@ -3,7 +3,7 @@ import {CreateTodoDto} from './dto/create-todo.dto';
 import {UpdateTodoDto} from './dto/update-todo.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Todo} from "./entities/todo.entity";
-import {Repository} from "typeorm";
+import {ILike, Repository} from "typeorm";
 import {PaginationQueryDto} from "./dto/pagination-query.dto";
 
 @Injectable()
@@ -21,9 +21,14 @@ export class TodosService {
         totalCount: number;
         totalPages: number;
     }> {
-        const { limit = 10, offset = 0 } = paginationQuery;
+        const { limit = 10, offset = 0, search } = paginationQuery;
+
+        const where = search
+            ? [{ name: ILike(`%${search}%`) }]
+            : {};
 
         const [data, totalCount] = await this.todoRepository.findAndCount({
+            where,
             skip: offset,
             take: limit,
             order: { createdAt: 'DESC' },
@@ -33,8 +38,6 @@ export class TodosService {
 
         return { data, totalCount, totalPages };
     }
-
-
 
     async findOne(id: string): Promise<Todo> {
         const todo: Todo | null = await this.todoRepository.findOne({

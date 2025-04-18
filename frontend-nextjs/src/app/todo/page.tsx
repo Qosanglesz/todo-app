@@ -1,19 +1,20 @@
 "use client"
 
 import TodoTable from "@/components/todo-page/TodoTable";
-import TodoSearchBar from "@/components/todo-page/TodoSearchBar";
 import CreateTodoDialog from "@/components/todo-page/CreateTodoDialog";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {deleteTodoRequest, fetchAllTodosRequest, PaginatedTodosResponse, updateTodoRequest} from "@/app/todo/actions";
 import {toast} from "sonner";
 import {TodosType, TodoUpdateDTO} from "@/types/todosType";
 import MyPagination from "@/components/pagination/MyPagination";
+import {Input} from "@/components/ui/input";
 
 export default function TodoPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [todos, setTodos] = useState<TodosType[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
+    const [search, setSearch] = useState("")
 
     useEffect(() => {
         const loadingTodos = async () => {
@@ -29,6 +30,15 @@ export default function TodoPage() {
         }
         loadingTodos()
     }, [])
+
+    useEffect(() => {
+        const searchHandle = async () => {
+            const result = await fetchAllTodosRequest(10, undefined, search)
+            setCurrentPage(1)
+            setTotalPage(result.totalPages)
+        }
+        searchHandle()
+    }, [search]);
 
     const reloadTodos = async () => {
         setIsLoading(true)
@@ -86,7 +96,6 @@ export default function TodoPage() {
 
     const handlePageChange = async (page: number) => {
         setCurrentPage(page)
-        setIsLoading(true)
         const offset = (page: number)  => {
             if ((page-1) === 0) {
                 return undefined
@@ -101,7 +110,6 @@ export default function TodoPage() {
             .catch((error) => {
                 toast.error((error as Error).message)
             })
-        setIsLoading(false)
     }
 
     if (isLoading) {
@@ -117,7 +125,7 @@ export default function TodoPage() {
             <p className="text-2xl font-bold">{'Todo List Management'}</p>
 
             <div className="flex justify-between items-center">
-                <TodoSearchBar/>
+                <Input type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)}/>
                 <CreateTodoDialog onCreated={reloadTodos} />
             </div>
 

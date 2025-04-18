@@ -31,10 +31,15 @@ export type PaginatedTodosResponse = {
     totalPages: number;
 };
 
-export async function fetchAllTodosRequest(limit?: number, offset?: number): Promise<PaginatedTodosResponse> {
+export async function fetchAllTodosRequest(
+    limit?: number,
+    offset?: number,
+    search?: string
+): Promise<PaginatedTodosResponse> {
     const params = new URLSearchParams();
     if (limit !== undefined) params.append('limit', limit.toString());
     if (offset !== undefined) params.append('offset', offset.toString());
+    if (search) params.append('search', search);
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/todos?${params.toString()}`, {
         method: 'GET',
