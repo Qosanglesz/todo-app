@@ -84,21 +84,21 @@ export default function SignUpPage() {
                         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                             <div className="space-y-2">
                                 <Label htmlFor="username">Username</Label>
-                                <Input id="username" {...register('username')} placeholder="johndoe"/>
+                                <Input id="username" {...register('username')} placeholder="username"/>
                                 {errors.username && (
                                     <p className="text-sm text-red-500">{errors.username.message}</p>
                                 )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="password">Password</Label>
-                                <Input id="password" type="password" {...register('password')} />
+                                <Input id="password" type="password" {...register('password')} placeholder="password"/>
                                 {errors.password && (
                                     <p className="text-sm text-red-500">{errors.password.message}</p>
                                 )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                                <Input id="confirmPassword" type="password" {...register('confirmPassword')} />
+                                <Input id="confirmPassword" type="password" {...register('confirmPassword')} placeholder="confirm password" />
                                 {errors.confirmPassword && (
                                     <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
                                 )}
