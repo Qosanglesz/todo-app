@@ -18,6 +18,13 @@ export async function CreateTodoRequest(
       body: JSON.stringify(data),
     });
 
+    if (response.status === 401 || response.status === 403) {
+      return {
+        success: false,
+        message: 'Unauthorized',
+      };
+    }
+
     if (!response.ok) {
       const errorBody = await response.json();
       return { success: false, message: errorBody.message || 'Unexpected error occurred' };

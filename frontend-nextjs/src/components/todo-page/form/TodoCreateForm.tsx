@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { CreateTodoRequest } from '@/app/todo/actions';
+import {useRouter} from "next/navigation";
 
 const formSchema = z.object({
   name: z
@@ -38,6 +39,7 @@ const formSchema = z.object({
 });
 
 export function TodoCreateForm({ onCreated }: { onCreated?: () => void }) {
+    const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,6 +58,12 @@ export function TodoCreateForm({ onCreated }: { onCreated?: () => void }) {
 
     try {
       const result = await CreateTodoRequest(data);
+
+      if(!result.success && result.message==="Unauthorized") {
+          toast.warning("You need to Sin-in first")
+          router.push('/signin');
+          return;
+      }
 
       if (!result.success) {
         toast.error(result.message);
