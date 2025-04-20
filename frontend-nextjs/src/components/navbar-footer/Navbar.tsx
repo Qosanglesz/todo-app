@@ -5,9 +5,27 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { ListTodo, Menu } from 'lucide-react';
+import {
+  ClipboardPen,
+  ListTodo,
+  LogIn,
+  LogOut,
+  Menu
+} from 'lucide-react';
 import { ModeToggle } from '@/components/theme/ModeToggle';
 import { toast } from 'sonner';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface NavbarProps {
   isAuth: boolean;
@@ -62,16 +80,33 @@ export default function Navbar({ isAuth }: NavbarProps) {
             <ModeToggle />
 
             {isAuthenticated ? (
-                <Button variant="outline" onClick={handleLogout}>
-                  Logout
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline">
+                      <LogOut />
+                      Logout
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        You will be logged out of your account.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
             ) : (
                 <>
                   <Link href="/signup">
-                    <Button variant="ghost">Sign up</Button>
+                    <Button variant="ghost"><ClipboardPen />Sign up</Button>
                   </Link>
                   <Link href="/signin">
-                    <Button>Sign in</Button>
+                    <Button><LogIn />Sign in</Button>
                   </Link>
                 </>
             )}
@@ -105,9 +140,27 @@ export default function Navbar({ isAuth }: NavbarProps) {
 
                   <div className="mt-4 flex flex-col gap-2">
                     {isAuthenticated ? (
-                        <Button variant="outline" onClick={handleLogout}>
-                          Logout
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="outline" className="w-full">
+                              Logout
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                You will be logged out of your account.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={handleLogout}>
+                                Logout
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                     ) : (
                         <>
                           <Link href="/signup" onClick={() => setOpen(false)}>
