@@ -9,12 +9,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UserService } from '../users/user.service';
+import { UsersService } from '../users/users.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Post('login')
   @HttpCode(200)
